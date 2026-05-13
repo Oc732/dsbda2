@@ -1,0 +1,174 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install pandas numpy matplotlib seaborn
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import numpy as np
+import pandas as pd
+
+import seaborn as sns
+
+import matplotlib
+import matplotlib.pyplot as plt
+
+# Enable Inline Plotting (Jupyter/Colab)
+%matplotlib inline
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+df = pd.read_csv("data10.csv")
+
+# Rename Columns
+df.columns = [
+    "col1",
+    "col2",
+    "col3",
+    "col4",
+    "col5"
+]
+
+# -----------------------------------
+# Display Dataset
+# -----------------------------------
+
+print("First 5 Rows:")
+print(df.head())
+
+# -----------------------------------
+# Number of Columns
+# -----------------------------------
+
+column_count = len(list(df))
+
+print("\nTotal Number of Columns:")
+print(column_count)
+
+# -----------------------------------
+# Dataset Information
+# -----------------------------------
+
+print("\nDataset Information:")
+print(df.info())
+
+# -----------------------------------
+# Unique Values in col5
+# -----------------------------------
+
+print("\nUnique Values in col5:")
+print(np.unique(df["col5"]))
+
+# -----------------------------------
+# Statistical Summary
+# -----------------------------------
+
+print("\nDataset Description:")
+print(df.describe())
+
+# -----------------------------------
+# Histograms
+# -----------------------------------
+
+fig, axes = plt.subplots(
+    2,
+    2,
+    figsize=(16, 8)
+)
+
+# Histogram for Column 1
+axes[0, 0].set_title(
+    "Distribution of First Column"
+)
+
+axes[0, 0].hist(df["col1"])
+
+# Histogram for Column 2
+axes[0, 1].set_title(
+    "Distribution of Second Column"
+)
+
+axes[0, 1].hist(df["col2"])
+
+# Histogram for Column 3
+axes[1, 0].set_title(
+    "Distribution of Third Column"
+)
+
+axes[1, 0].hist(df["col3"])
+
+# Histogram for Column 4
+axes[1, 1].set_title(
+    "Distribution of Fourth Column"
+)
+
+axes[1, 1].hist(df["col4"])
+
+plt.tight_layout()
+
+plt.show()
+
+# -----------------------------------
+# Box Plot Data
+# -----------------------------------
+
+data_to_plot = [
+    df["col1"],
+    df["col2"],
+    df["col3"],
+    df["col4"]
+]
+
+# -----------------------------------
+# Box Plot using Matplotlib
+# -----------------------------------
+
+sns.set_style("whitegrid")
+
+fig = plt.figure(
+    1,
+    figsize=(12, 8)
+)
+
+ax = fig.add_subplot(111)
+
+# Create Boxplot
+box_plot = ax.boxplot(data_to_plot)
+
+plt.title("Box Plot of Columns")
+
+plt.show()
+
+# -----------------------------------
+# Seaborn Box Plot 1
+# -----------------------------------
+
+sns.boxplot(
+    x='col1',
+    y='col2',
+    data=df
+)
+
+plt.title(
+    "Box Plot of col1 vs col2"
+)
+
+plt.show()
+
+# -----------------------------------
+# Seaborn Box Plot 2
+# -----------------------------------
+
+sns.boxplot(
+    x='col3',
+    y='col4',
+    data=df
+)
+
+plt.title(
+    "Box Plot of col3 vs col4"
+)
+
+plt.show()

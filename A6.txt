@@ -1,0 +1,153 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install scikit-learn pandas numpy
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import numpy as np
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import (
+    precision_score,
+    confusion_matrix,
+    accuracy_score,
+    recall_score
+)
+from sklearn.preprocessing import StandardScaler
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+dataset = pd.read_csv("data6.csv")
+
+print("First 5 Rows of Dataset:")
+print(dataset.head())
+
+# -----------------------------------
+# Define Features and Target Variable
+# -----------------------------------
+
+X = dataset.iloc[:, :-1].values
+
+y = dataset.iloc[:, -1].values
+
+# -----------------------------------
+# Split Dataset
+# -----------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.25,
+    random_state=2
+)
+
+# -----------------------------------
+# Feature Scaling
+# -----------------------------------
+
+scaler = StandardScaler()
+
+X_train = scaler.fit_transform(X_train)
+
+X_test = scaler.transform(X_test)
+
+# -----------------------------------
+# Train Naive Bayes Model
+# -----------------------------------
+
+classifier = GaussianNB()
+
+classifier.fit(X_train, y_train)
+
+# -----------------------------------
+# Make Predictions
+# -----------------------------------
+
+y_pred = classifier.predict(X_test)
+
+print("\nPredicted Values:")
+print(y_pred)
+
+# -----------------------------------
+# Model Evaluation
+# -----------------------------------
+
+accuracy = accuracy_score(
+    y_test,
+    y_pred
+)
+
+precision = precision_score(
+    y_test,
+    y_pred,
+    average='micro'
+)
+
+recall = recall_score(
+    y_test,
+    y_pred,
+    average='micro'
+)
+
+print("\nModel Evaluation Metrics:")
+
+print(f"Accuracy  : {accuracy}")
+
+print(f"Precision : {precision}")
+
+print(f"Recall    : {recall}")
+
+# -----------------------------------
+# Confusion Matrix
+# -----------------------------------
+
+cm = confusion_matrix(
+    y_test,
+    y_pred
+)
+
+print("\nConfusion Matrix:")
+
+print(cm)
+
+# -----------------------------------
+# User Input for Prediction
+# -----------------------------------
+
+print("\nEnter Values for Prediction:")
+
+age = float(
+    input("Enter Age: ")
+)
+
+salary = float(
+    input("Enter Salary: ")
+)
+
+# -----------------------------------
+# Scale User Input
+# -----------------------------------
+
+scaled_input = scaler.transform(
+    [[age, salary]]
+)
+
+# -----------------------------------
+# Predict Output
+# -----------------------------------
+
+prediction = classifier.predict(
+    scaled_input
+)
+
+print(
+    f"\nThe Predicted Class "
+    f"for Age {age} and "
+    f"Salary {salary} is: "
+    f"{prediction[0]}"
+)

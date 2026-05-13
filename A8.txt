@@ -1,0 +1,251 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install pandas numpy matplotlib seaborn
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+dataset = pd.read_csv("train.csv")
+
+print("First 5 Rows:")
+print(dataset.head())
+
+# -----------------------------------
+# Dataset Information
+# -----------------------------------
+
+print("\nDataset Information:")
+print(dataset.info())
+
+print("\nDataset Description:")
+print(dataset.describe())
+
+print("\nData Types:")
+print(dataset.dtypes)
+
+print("\nMissing Values:")
+print(dataset.isnull().sum())
+
+# -----------------------------------
+# Distribution Plot
+# -----------------------------------
+
+sns.distplot(dataset['Fare'])
+
+plt.title("Distribution Plot of Fare")
+
+plt.show()
+
+# -----------------------------------
+# Distribution Plot without KDE
+# -----------------------------------
+
+sns.distplot(
+    dataset['Fare'],
+    kde=False
+)
+
+plt.title(
+    "Distribution Plot without KDE"
+)
+
+plt.show()
+
+# -----------------------------------
+# Distribution Plot with Bins
+# -----------------------------------
+
+sns.distplot(
+    dataset['Fare'],
+    kde=False,
+    bins=10
+)
+
+plt.title(
+    "Distribution Plot with 10 Bins"
+)
+
+plt.show()
+
+# -----------------------------------
+# Joint Plot
+# -----------------------------------
+
+sns.jointplot(
+    x='Age',
+    y='Fare',
+    data=dataset
+)
+
+plt.show()
+
+# -----------------------------------
+# Pair Plot
+# -----------------------------------
+
+sns.pairplot(dataset)
+
+plt.show()
+
+# -----------------------------------
+# Rug Plot
+# -----------------------------------
+
+sns.rugplot(dataset['Fare'])
+
+plt.title("Rug Plot of Fare")
+
+plt.show()
+
+# -----------------------------------
+# Bar Plot
+# -----------------------------------
+
+sns.barplot(
+    x='Sex',
+    y='Fare',
+    data=dataset
+)
+
+plt.title(
+    "Average Fare by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Bar Plot with Standard Deviation
+# -----------------------------------
+
+sns.barplot(
+    x='Sex',
+    y='Age',
+    data=dataset,
+    estimator=np.std
+)
+
+plt.title(
+    "Standard Deviation of Age by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Count Plot
+# -----------------------------------
+
+sns.countplot(
+    x='Fare',
+    data=dataset
+)
+
+plt.title("Count Plot of Fare")
+
+plt.show()
+
+# -----------------------------------
+# Box Plot
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset
+)
+
+plt.title(
+    "Box Plot of Age by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Box Plot: Survival vs Fare
+# -----------------------------------
+
+sns.boxplot(
+    x='Survived',
+    y='Fare',
+    data=dataset
+)
+
+plt.title(
+    "Fare Distribution by Survival"
+)
+
+plt.show()
+
+# -----------------------------------
+# Box Plot with Hue
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset,
+    hue='Survived'
+)
+
+plt.title(
+    "Age Distribution by Gender and Survival"
+)
+
+plt.show()
+
+# -----------------------------------
+# Violin Plot
+# -----------------------------------
+
+sns.violinplot(
+    x='Sex',
+    y='Age',
+    data=dataset,
+    hue='Survived'
+)
+
+plt.title(
+    "Violin Plot of Age Distribution"
+)
+
+plt.show()
+
+# -----------------------------------
+# Strip Plot
+# -----------------------------------
+
+sns.stripplot(
+    x='Sex',
+    y='Age',
+    data=dataset
+)
+
+plt.title(
+    "Strip Plot of Age by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Histogram Plot
+# -----------------------------------
+
+sns.histplot(
+    data=dataset,
+    x='Fare',
+    y='Survived'
+)
+
+plt.title(
+    "Histogram Plot of Fare vs Survival"
+)
+
+plt.show()

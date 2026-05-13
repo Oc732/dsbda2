@@ -1,0 +1,181 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install scikit-learn
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import pandas as pd
+import numpy as np
+
+from sklearn.preprocessing import OneHotEncoder
+
+# -----------------------------------
+# Load Mall Customers Dataset
+# -----------------------------------
+
+df = pd.read_csv("Mall_Customers.csv")
+
+print("First 5 Rows:")
+print(df.head())
+
+# -----------------------------------
+# Mean
+# -----------------------------------
+
+print("\nMean of All Numeric Columns:")
+print(df.mean(numeric_only=True))
+
+print("\nMean of Age:")
+print(df.loc[:, 'Age'].mean())
+
+print("\nMean of CustomerID:")
+print(df.loc[:, 'CustomerID'].mean())
+
+print("\nRow-wise Mean:")
+print(df.mean(axis=1, numeric_only=True)[0:4])
+
+# -----------------------------------
+# Median
+# -----------------------------------
+
+print("\nMedian of Dataset:")
+print(df.median(numeric_only=True))
+
+print("\nRow-wise Median:")
+print(df.median(axis=1, numeric_only=True)[0:4])
+
+print("\nMedian of CustomerID:")
+print(df.loc[:, 'CustomerID'].median())
+
+# -----------------------------------
+# Mode
+# -----------------------------------
+
+print("\nMode of Dataset:")
+print(df.mode())
+
+print("\nMode of CustomerID:")
+print(df.loc[:, 'CustomerID'].mode())
+
+print("\nMode of Age:")
+print(df.loc[:, 'Age'].mode())
+
+# -----------------------------------
+# Maximum Values
+# -----------------------------------
+
+print("\nMaximum Values:")
+print(df.max())
+
+print("\nMaximum Age:")
+print(df.loc[:, 'Age'].max(skipna=False))
+
+# -----------------------------------
+# Minimum Values
+# -----------------------------------
+
+print("\nMinimum Values:")
+print(df.min())
+
+print("\nMinimum Age:")
+print(df.loc[:, 'Age'].min(skipna=False))
+
+# -----------------------------------
+# Standard Deviation
+# -----------------------------------
+
+print("\nStandard Deviation:")
+print(df.std(numeric_only=True))
+
+print("\nStandard Deviation of Age:")
+print(df.loc[:, 'Age'].std())
+
+print("\nStandard Deviation of Annual Income:")
+print(df.loc[:, 'Annual Income (k$)'].std())
+
+print("\nRow-wise Standard Deviation:")
+print(df.std(axis=1, numeric_only=True)[0:4])
+
+# -----------------------------------
+# Group By Operation
+# -----------------------------------
+
+print("\nAverage Age Grouped by Genre:")
+print(df.groupby(['Genre'])['Age'].mean())
+
+# -----------------------------------
+# Rename Column
+# -----------------------------------
+
+df_updated = df.rename(
+    columns={'Annual Income (k$)': 'Income'},
+    inplace=False
+)
+
+print("\nDataset After Renaming Column:")
+print(df_updated.head())
+
+# -----------------------------------
+# One-Hot Encoding
+# -----------------------------------
+
+encoder = OneHotEncoder(sparse_output=False)
+
+encoded_data = encoder.fit_transform(df[['Genre']])
+
+encoded_df = pd.DataFrame(
+    encoded_data,
+    columns=encoder.get_feature_names_out(['Genre'])
+)
+
+print("\nEncoded Genre Data:")
+print(encoded_df.head())
+
+# Join Encoded Columns
+df_encoded = df_updated.join(encoded_df)
+
+print("\nDataset After One-Hot Encoding:")
+print(df_encoded.head())
+
+# -----------------------------------
+# Load IRIS Dataset
+# -----------------------------------
+
+iris = pd.read_csv("IRIS.csv")
+
+print("\nIRIS Dataset:")
+print(iris.head())
+
+# -----------------------------------
+# Iris Setosa Statistics
+# -----------------------------------
+
+iris_setosa = (
+    iris['species'] == 'Iris-setosa'
+)
+
+print("\nIris-setosa Statistics:")
+print(iris[iris_setosa].describe())
+
+# -----------------------------------
+# Iris Versicolor Statistics
+# -----------------------------------
+
+iris_versicolor = (
+    iris['species'] == 'Iris-versicolor'
+)
+
+print("\nIris-versicolor Statistics:")
+print(iris[iris_versicolor].describe())
+
+# -----------------------------------
+# Iris Virginica Statistics
+# -----------------------------------
+
+iris_virginica = (
+    iris['species'] == 'Iris-virginica'
+)
+
+print("\nIris-virginica Statistics:")
+print(iris[iris_virginica].describe())

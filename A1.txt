@@ -1,0 +1,98 @@
+# Import Required Libraries
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler, LabelEncoder, OneHotEncoder
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+df = pd.read_csv("IRIS.csv")
+
+# Display First 5 Rows
+print("First 5 Rows:")
+print(df.head())
+
+# Display Data Types
+print("\nData Types:")
+print(df.dtypes)
+
+# -----------------------------------
+# Data Normalization
+# -----------------------------------
+
+# Select Feature Columns
+X = df.iloc[:, :4]
+
+# Apply Min-Max Scaling
+scaler = MinMaxScaler()
+
+X_scaled = scaler.fit_transform(X)
+
+# Convert to DataFrame
+df_normalized = pd.DataFrame(
+    X_scaled,
+    columns=X.columns
+)
+
+print("\nNormalized Dataset:")
+print(df_normalized.head())
+
+# -----------------------------------
+# Label Encoding
+# -----------------------------------
+
+# Display Unique Species
+print("\nUnique Species Before Encoding:")
+print(df['species'].unique())
+
+# Apply Label Encoding
+label_encoder = LabelEncoder()
+
+df['species'] = label_encoder.fit_transform(df['species'])
+
+print("\nEncoded Species Values:")
+print(df['species'].unique())
+
+# -----------------------------------
+# One-Hot Encoding using OneHotEncoder
+# -----------------------------------
+
+# Separate Features
+features_df = df.drop(columns=['species'])
+
+# Create Encoder
+encoder = OneHotEncoder(sparse_output=False)
+
+# Apply Encoding
+encoded_data = encoder.fit_transform(df[['species']])
+
+# Convert Encoded Data to DataFrame
+encoded_df = pd.DataFrame(
+    encoded_data,
+    columns=[
+        'Iris-Setosa',
+        'Iris-Versicolor',
+        'Iris-Virginica'
+    ]
+)
+
+# Join Encoded Columns
+df_encoded = features_df.join(encoded_df)
+
+print("\nOne-Hot Encoded Dataset:")
+print(df_encoded.head())
+
+# -----------------------------------
+# One-Hot Encoding using get_dummies()
+# -----------------------------------
+
+one_hot_df = pd.get_dummies(
+    df,
+    columns=['species'],
+    prefix='Species',
+    drop_first=True
+)
+
+print("\nDataset using get_dummies():")
+print(one_hot_df.head())

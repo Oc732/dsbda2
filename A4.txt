@@ -1,0 +1,159 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install scikit-learn matplotlib pandas numpy
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+from sklearn.metrics import r2_score
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.datasets import fetch_california_housing
+from sklearn.metrics import mean_squared_error
+
+# -----------------------------------
+# Simple Linear Regression using NumPy
+# -----------------------------------
+
+# Input Data
+x = np.array([95, 85, 80, 70, 60])
+
+y = np.array([85, 95, 70, 65, 70])
+
+# Create Linear Model
+model = np.polyfit(x, y, 1)
+
+# Prediction Function
+predict = np.poly1d(model)
+
+# Predict Value for x = 65
+predicted_value = predict(65)
+
+print("Predicted Value for x = 65:")
+print(predicted_value)
+
+# Predict All Values
+y_pred = predict(x)
+
+print("\nPredicted Y Values:")
+print(y_pred)
+
+# R2 Score
+r2 = r2_score(y, y_pred)
+
+print("\nR2 Score:")
+print(r2)
+
+# Regression Line
+y_line = model[1] + model[0] * x
+
+# Plot Graph
+plt.plot(x, y_line, c='red')
+
+plt.scatter(x, y_pred)
+
+plt.scatter(x, y, c='red')
+
+plt.title("Simple Linear Regression")
+
+plt.xlabel("X Values")
+
+plt.ylabel("Y Values")
+
+plt.show()
+
+# -----------------------------------
+# California Housing Dataset
+# -----------------------------------
+
+# Load Dataset
+housing = fetch_california_housing()
+
+# Convert to DataFrame
+data = pd.DataFrame(housing.data)
+
+# Assign Column Names
+data.columns = housing.feature_names
+
+print("\nFirst 5 Rows of Dataset:")
+print(data.head())
+
+# Add Target Column
+data['PRICE'] = housing.target
+
+# Check Missing Values
+print("\nMissing Values:")
+print(data.isnull().sum())
+
+# -----------------------------------
+# Feature Selection
+# -----------------------------------
+
+X = data.drop(['PRICE'], axis=1)
+
+y = data['PRICE']
+
+# -----------------------------------
+# Split Dataset
+# -----------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=0
+)
+
+# -----------------------------------
+# Train Linear Regression Model
+# -----------------------------------
+
+linear_model = LinearRegression()
+
+linear_model.fit(X_train, y_train)
+
+# -----------------------------------
+# Predictions
+# -----------------------------------
+
+y_train_pred = linear_model.predict(X_train)
+
+y_test_pred = linear_model.predict(X_test)
+
+# -----------------------------------
+# Create Prediction DataFrames
+# -----------------------------------
+
+train_df = pd.DataFrame({
+    'Actual': y_train,
+    'Predicted': y_train_pred
+})
+
+test_df = pd.DataFrame({
+    'Actual': y_test,
+    'Predicted': y_test_pred
+})
+
+print("\nTraining Predictions:")
+print(train_df.head())
+
+print("\nTesting Predictions:")
+print(test_df.head())
+
+# -----------------------------------
+# Model Evaluation
+# -----------------------------------
+
+mse = mean_squared_error(y_test, y_test_pred)
+
+r2 = r2_score(y_test, y_test_pred)
+
+print("\nMean Squared Error:")
+print(mse)
+
+print("\nR2 Score:")
+print(r2)

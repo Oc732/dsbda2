@@ -1,0 +1,190 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install seaborn
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from sklearn.preprocessing import LabelEncoder
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+df = pd.read_csv("StudentsPerformanceTest1(1).csv")
+
+print("First 5 Rows:")
+print(df.head())
+
+# -----------------------------------
+# Check Missing Values
+# -----------------------------------
+
+print("\nMissing Values in Dataset:")
+print(df.isnull().sum())
+
+# Rows where Math Score is NULL
+null_math = df[pd.isnull(df["math score"])]
+
+print("\nRows with NULL Math Score:")
+print(null_math)
+
+# Rows where Math Score is NOT NULL
+not_null_math = df[pd.notnull(df["math score"])]
+
+print("\nRows with Valid Math Score:")
+print(not_null_math)
+
+# -----------------------------------
+# Label Encoding
+# -----------------------------------
+
+label_encoder = LabelEncoder()
+
+df['gender'] = label_encoder.fit_transform(df['gender'])
+
+print("\nDataset After Label Encoding:")
+print(df.head())
+
+# -----------------------------------
+# Handling Missing Values
+# -----------------------------------
+
+# Treat "Na" and "na" as Missing Values
+missing_values = ["Na", "na"]
+
+df = pd.read_csv(
+    "StudentsPerformanceTest1(1).csv",
+    na_values=missing_values
+)
+
+# Fill all missing values with 0
+filled_df = df.fillna(0)
+
+print("\nDataset After Filling Missing Values with 0:")
+print(filled_df.head())
+
+# -----------------------------------
+# Fill Missing Values Using Statistics
+# -----------------------------------
+
+# Mean for Math Score
+mean_value = df['math score'].mean()
+
+df['math score'].fillna(
+    mean_value,
+    inplace=True
+)
+
+# Median for Reading Score
+median_value = df['reading score'].median()
+
+df['reading score'].fillna(
+    median_value,
+    inplace=True
+)
+
+# Standard Deviation for Writing Score
+std_value = df['writing score'].std()
+
+df['writing score'].fillna(
+    std_value,
+    inplace=True
+)
+
+# Minimum Value for Placement Score
+min_value = df['Placement Score'].min()
+
+df['Placement Score'].fillna(
+    min_value,
+    inplace=True
+)
+
+# Maximum Value for Placement Offer Count
+max_value = df['placement offer count'].max()
+
+df['placement offer count'].fillna(
+    max_value,
+    inplace=True
+)
+
+print("\nDataset After Handling Missing Values:")
+print(df.head())
+
+# -----------------------------------
+# Load Another Dataset
+# -----------------------------------
+
+df_demo = pd.read_csv("demo1.csv")
+
+print("\nDemo Dataset:")
+print(df_demo.head())
+
+# -----------------------------------
+# Box Plot
+# -----------------------------------
+
+columns = [
+    'math score',
+    'reading score',
+    'writing score',
+    'placement score'
+]
+
+df_demo.boxplot(columns)
+
+plt.title("Boxplot of Scores")
+
+plt.show()
+
+# -----------------------------------
+# Scatter Plot
+# -----------------------------------
+
+fig, ax = plt.subplots(figsize=(18, 10))
+
+ax.scatter(
+    df_demo['placement score'],
+    df_demo['placement offer count']
+)
+
+ax.set_xlabel("Placement Score")
+ax.set_ylabel("Placement Offer Count")
+
+ax.set_title(
+    "Placement Score vs Placement Offers"
+)
+
+plt.show()
+
+# -----------------------------------
+# Histogram of Math Score
+# -----------------------------------
+
+df_demo['math score'].plot(kind='hist')
+
+plt.title("Histogram of Math Score")
+
+plt.show()
+
+# -----------------------------------
+# Log Transformation
+# -----------------------------------
+
+df_demo['log_math'] = np.log10(
+    df_demo['math score']
+)
+
+# Histogram of Log Transformed Data
+df_demo['log_math'].plot(kind='hist')
+
+plt.title(
+    "Histogram of Log Transformed Math Score"
+)
+
+plt.show()

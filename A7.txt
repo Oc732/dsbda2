@@ -1,0 +1,301 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install nltk
+!pip install --upgrade pip
+!pip install scikit-learn pandas matplotlib
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import nltk
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from nltk.tokenize import (
+    sent_tokenize,
+    word_tokenize,
+    RegexpTokenizer
+)
+
+from nltk.probability import FreqDist
+
+from nltk.corpus import stopwords
+
+from nltk.stem import (
+    PorterStemmer
+)
+
+from nltk.stem.wordnet import (
+    WordNetLemmatizer
+)
+
+from sklearn.feature_extraction.text import (
+    CountVectorizer,
+    TfidfVectorizer
+)
+
+from sklearn.model_selection import (
+    train_test_split
+)
+
+from sklearn.naive_bayes import (
+    MultinomialNB
+)
+
+from sklearn import metrics
+
+# -----------------------------------
+# Download Required NLTK Packages
+# -----------------------------------
+
+nltk.download('punkt')
+
+nltk.download('stopwords')
+
+nltk.download('wordnet')
+
+nltk.download(
+    'averaged_perceptron_tagger'
+)
+
+# -----------------------------------
+# Sentence Tokenization
+# -----------------------------------
+
+text = """
+Hello Mr. Smith, how are you doing today?
+The weather is great, and the city is awesome!
+The sky is pinkish-blue.
+You shouldn't eat cardboard.
+"""
+
+tokenized_text = sent_tokenize(text)
+
+print("Sentence Tokenization:")
+print(tokenized_text)
+
+# -----------------------------------
+# Word Tokenization
+# -----------------------------------
+
+tokenized_word = word_tokenize(text)
+
+print("\nWord Tokenization:")
+print(tokenized_word)
+
+# -----------------------------------
+# Frequency Distribution
+# -----------------------------------
+
+fdist = FreqDist(tokenized_word)
+
+print("\nFrequency Distribution:")
+print(fdist)
+
+# -----------------------------------
+# Stopwords Removal
+# -----------------------------------
+
+stop_words = set(
+    stopwords.words("english")
+)
+
+print("\nStopwords:")
+print(stop_words)
+
+filtered_sent = []
+
+for word in tokenized_word:
+
+    if word not in stop_words:
+
+        filtered_sent.append(word)
+
+print("\nTokenized Sentence:")
+print(tokenized_word)
+
+print("\nFiltered Sentence:")
+print(filtered_sent)
+
+# -----------------------------------
+# Stemming
+# -----------------------------------
+
+ps = PorterStemmer()
+
+stemmed_words = []
+
+for word in filtered_sent:
+
+    stemmed_words.append(
+        ps.stem(word)
+    )
+
+print("\nStemmed Words:")
+print(stemmed_words)
+
+# -----------------------------------
+# Lemmatization
+# -----------------------------------
+
+lemmatizer = WordNetLemmatizer()
+
+word = "flying"
+
+print(
+    "\nLemmatized Word:",
+    lemmatizer.lemmatize(word, "v")
+)
+
+print(
+    "Stemmed Word:",
+    ps.stem(word)
+)
+
+# -----------------------------------
+# POS Tagging
+# -----------------------------------
+
+sentence = (
+    "Albert Einstein was born "
+    "in Ulm, Germany in 1879."
+)
+
+tokens = nltk.word_tokenize(sentence)
+
+print("\nTokens:")
+print(tokens)
+
+print("\nPOS Tags:")
+print(nltk.pos_tag(tokens))
+
+# -----------------------------------
+# Load Dataset
+# -----------------------------------
+
+data = pd.read_csv(
+    "train.tsv",
+    sep='\t'
+)
+
+print("\nFirst 5 Rows:")
+print(data.head())
+
+print("\nDataset Info:")
+print(data.info())
+
+print("\nSentiment Counts:")
+print(data.Sentiment.value_counts())
+
+# -----------------------------------
+# Sentiment Visualization
+# -----------------------------------
+
+sentiment_count = data.groupby(
+    'Sentiment'
+).count()
+
+plt.bar(
+    sentiment_count.index.values,
+    sentiment_count['Phrase']
+)
+
+plt.xlabel("Review Sentiments")
+
+plt.ylabel("Number of Reviews")
+
+plt.title("Sentiment Analysis")
+
+plt.show()
+
+# -----------------------------------
+# Count Vectorization
+# -----------------------------------
+
+tokenizer = RegexpTokenizer(
+    r'[a-zA-Z0-9]+'
+)
+
+count_vectorizer = CountVectorizer(
+    lowercase=True,
+    stop_words='english',
+    ngram_range=(1, 1),
+    tokenizer=tokenizer.tokenize
+)
+
+text_counts = count_vectorizer.fit_transform(
+    data['Phrase']
+)
+
+# -----------------------------------
+# Train-Test Split
+# -----------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    text_counts,
+    data['Sentiment'],
+    test_size=0.3,
+    random_state=1
+)
+
+# -----------------------------------
+# Naive Bayes using CountVectorizer
+# -----------------------------------
+
+classifier = MultinomialNB()
+
+classifier.fit(X_train, y_train)
+
+predicted = classifier.predict(X_test)
+
+print(
+    "\nMultinomialNB Accuracy "
+    "(CountVectorizer):",
+    metrics.accuracy_score(
+        y_test,
+        predicted
+    )
+)
+
+# -----------------------------------
+# TF-IDF Vectorization
+# -----------------------------------
+
+tfidf = TfidfVectorizer()
+
+text_tfidf = tfidf.fit_transform(
+    data['Phrase']
+)
+
+print("\nTF-IDF Matrix:")
+print(text_tfidf)
+
+# -----------------------------------
+# Train-Test Split for TF-IDF
+# -----------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    text_tfidf,
+    data['Sentiment'],
+    test_size=0.3,
+    random_state=123
+)
+
+# -----------------------------------
+# Naive Bayes using TF-IDF
+# -----------------------------------
+
+classifier = MultinomialNB()
+
+classifier.fit(X_train, y_train)
+
+predicted = classifier.predict(X_test)
+
+print(
+    "\nMultinomialNB Accuracy "
+    "(TF-IDF):",
+    metrics.accuracy_score(
+        y_test,
+        predicted
+    )
+)

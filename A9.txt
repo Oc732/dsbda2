@@ -1,0 +1,134 @@
+# Install Required Libraries (Run in Jupyter/Colab)
+!pip install pandas numpy matplotlib seaborn
+
+# -----------------------------------
+# Import Required Libraries
+# -----------------------------------
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+from seaborn import load_dataset
+
+# -----------------------------------
+# Load Titanic Dataset
+# -----------------------------------
+
+dataset = pd.read_csv("train.csv")
+
+print("First 5 Rows of Titanic Dataset:")
+print(dataset.head())
+
+# -----------------------------------
+# Box Plot: Gender vs Age
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset
+)
+
+plt.title(
+    "Box Plot of Age by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Box Plot with Survival Hue
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset,
+    hue='Survived'
+)
+
+plt.title(
+    "Age Distribution by Gender and Survival"
+)
+
+plt.show()
+
+# -----------------------------------
+# Load Dataset Again
+# -----------------------------------
+
+data = pd.read_csv("train.csv")
+
+# -----------------------------------
+# Load Tips Dataset from Seaborn
+# -----------------------------------
+
+tips = load_dataset("tips")
+
+print("\nFirst 5 Rows of Tips Dataset:")
+print(tips.head())
+
+# -----------------------------------
+# Box Plot: Survival vs Fare
+# -----------------------------------
+
+sns.boxplot(
+    x='Survived',
+    y='Fare',
+    data=dataset
+)
+
+plt.title(
+    "Fare Distribution Based on Survival"
+)
+
+plt.show()
+
+# -----------------------------------
+# Box Plot: Gender vs Age
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset
+)
+
+plt.title(
+    "Age Distribution by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Another Box Plot Example
+# -----------------------------------
+
+sns.boxplot(
+    x='Sex',
+    y='Age',
+    data=dataset
+)
+
+plt.title(
+    "Repeated Box Plot of Age by Gender"
+)
+
+plt.show()
+
+# -----------------------------------
+# Box Plot: Survival vs Fare
+# -----------------------------------
+
+sns.boxplot(
+    x='Survived',
+    y='Fare',
+    data=dataset
+)
+
+plt.title(
+    "Fare Comparison for Survival"
+)
+
+plt.show()
